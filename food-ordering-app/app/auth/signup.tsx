@@ -8,38 +8,36 @@ import {
   StyleSheet,
 } from "react-native";
 import { useRouter } from "expo-router";
+import { API_URL } from "../config/api";
 
 export default function SignupScreen() {
   const router = useRouter();
 
-  const [name, setName] = useState<string>("");
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
-  const [loading, setLoading] = useState<boolean>(false);
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleSignup = async () => {
     if (!name || !email || !password) {
-      Alert.alert("Validation Error", "All fields are required");
+      Alert.alert("Error", "All fields required");
       return;
     }
 
-    setLoading(true);
-
     try {
-      const response = await fetch(
-        "http://localhost:3000/auth/signup",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            name,
-            email,
-            password,
-          }),
-        }
-      );
+      setLoading(true);
+
+      const response = await fetch(`${API_URL}/auth/signup`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name,
+          email,
+          password,
+        }),
+      });
 
       const data = await response.json();
 
@@ -48,10 +46,13 @@ export default function SignupScreen() {
         return;
       }
 
-      Alert.alert("Success", "Account created successfully");
-      router.replace("/home/page");
+      // Success message + redirect to home
+      Alert.alert("Success", "Account created", [
+        { text: "OK", onPress: () => router.replace("/") }, // home route එක
+      ]);
+
     } catch (error) {
-      Alert.alert("Error", "Cannot connect to server");
+      Alert.alert("Error", "Server not reachable");
       console.log(error);
     } finally {
       setLoading(false);
@@ -71,11 +72,11 @@ export default function SignupScreen() {
 
       <TextInput
         placeholder="Email"
-        keyboardType="email-address"
-        autoCapitalize="none"
         value={email}
         onChangeText={setEmail}
         style={styles.input}
+        keyboardType="email-address"
+        autoCapitalize="none"
       />
 
       <TextInput
@@ -86,22 +87,9 @@ export default function SignupScreen() {
         style={styles.input}
       />
 
-      <Pressable
-        onPress={handleSignup}
-        disabled={loading}
-        style={[
-          styles.button,
-          loading && { opacity: 0.7 },
-        ]}
-      >
+      <Pressable onPress={handleSignup} style={styles.button}>
         <Text style={styles.buttonText}>
           {loading ? "Creating..." : "Create Account"}
-        </Text>
-      </Pressable>
-
-      <Pressable onPress={() => router.back()}>
-        <Text style={styles.loginText}>
-          Already have an account? Login
         </Text>
       </Pressable>
     </View>
@@ -109,17 +97,8 @@ export default function SignupScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    padding: 24,
-    backgroundColor: "#fff",
-  },
-  title: {
-    fontSize: 28,
-    fontWeight: "bold",
-    marginBottom: 24,
-  },
+  container: { flex: 1, justifyContent: "center", padding: 24 },
+  title: { fontSize: 28, fontWeight: "bold", marginBottom: 24 },
   input: {
     borderWidth: 1,
     borderColor: "#ccc",
@@ -133,14 +112,5 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     alignItems: "center",
   },
-  buttonText: {
-    color: "#fff",
-    fontSize: 16,
-    fontWeight: "bold",
-  },
-  loginText: {
-    marginTop: 20,
-    textAlign: "center",
-    color: "#555",
-  },
+  buttonText: { color: "#fff", fontWeight: "bold" },
 });
