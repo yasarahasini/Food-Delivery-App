@@ -3,7 +3,7 @@ import { useCart } from "@/app/context/CartContext";
 import { useRouter } from "expo-router"; // add this
 
 export default function CartPage() {
-  const { cart, removeFromCart, clearCart } = useCart();
+  const { cart, removeFromCart } = useCart();
   const router = useRouter(); // add this
 
   const totalPrice = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);

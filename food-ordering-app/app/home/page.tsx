@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { categories } from "../types/Food";
-import { foods } from "../data/food";
+import { foods } from "../types/Food";
 
 const FoodCard = ({ item, onPress }: any) => (
   <Pressable
