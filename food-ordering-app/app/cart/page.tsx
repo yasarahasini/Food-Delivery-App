@@ -1,10 +1,10 @@
 import { View, Text, ScrollView, Image, Pressable } from "react-native";
 import { useCart } from "@/app/context/CartContext";
-import { useRouter } from "expo-router"; // add this
+import { useRouter } from "expo-router"; 
 
 export default function CartPage() {
   const { cart, removeFromCart } = useCart();
-  const router = useRouter(); // add this
+  const router = useRouter(); 
 
   const totalPrice = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
