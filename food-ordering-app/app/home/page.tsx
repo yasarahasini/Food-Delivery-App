@@ -2,7 +2,7 @@ import { View, Text, ScrollView, TextInput, Image, Pressable } from "react-nativ
 import { useState } from "react";
 import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
-import { categories } from '../types/Food';
+import { categories } from "../types/Food";
 import { foods } from "../data/food";
 
 const FoodCard = ({ item, onPress }: any) => (
@@ -22,9 +22,12 @@ const FoodCard = ({ item, onPress }: any) => (
       style={{ width: 80, height: 80, borderRadius: 12, marginRight: 12 }}
       resizeMode="cover"
     />
+
     <View style={{ flex: 1 }}>
       <Text style={{ fontSize: 16, fontWeight: "bold" }}>{item.name}</Text>
-      <Text style={{ fontSize: 14, color: "#777", marginTop: 4 }}>${item.price}</Text>
+      <Text style={{ fontSize: 14, color: "#777", marginTop: 4 }}>
+        ${item.price}
+      </Text>
     </View>
   </Pressable>
 );
@@ -35,8 +38,13 @@ export default function HomeScreen() {
   const [search, setSearch] = useState("");
 
   const filteredFoods = foods.filter((food) => {
-    const matchCategory = selectedCategory === "All" || food.category === selectedCategory;
-    const matchSearch = food.name.toLowerCase().includes(search.toLowerCase());
+    const matchCategory =
+      selectedCategory === "All" || food.category === selectedCategory;
+
+    const matchSearch = food.name
+      .toLowerCase()
+      .includes(search.toLowerCase());
+
     return matchCategory && matchSearch;
   });
 
@@ -44,11 +52,23 @@ export default function HomeScreen() {
     <ScrollView showsVerticalScrollIndicator={false}>
       <View style={{ padding: 16 }}>
         <Text style={{ fontSize: 14, color: "#777" }}>Deliver to</Text>
+
         <View
-          style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginTop: 4 }}
+          style={{
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems: "center",
+            marginTop: 4,
+          }}
         >
-          <Text style={{ fontSize: 20, fontWeight: "bold" }}>Colombo, Sri Lanka</Text>
-          <Image source={require("../../assets/images/yasara.png")} style={{ width: 42, height: 42, borderRadius: 21 }} />
+          <Text style={{ fontSize: 20, fontWeight: "bold" }}>
+            Colombo, Sri Lanka
+          </Text>
+
+          <Image
+            source={require("../../assets/images/yasara.png")}
+            style={{ width: 42, height: 42, borderRadius: 21 }}
+          />
         </View>
       </View>
 
@@ -64,10 +84,20 @@ export default function HomeScreen() {
         }}
       >
         <Ionicons name="search" size={20} color="#777" />
-        <TextInput placeholder="Search foods" value={search} onChangeText={setSearch} style={{ marginLeft: 8, flex: 1 }} />
+
+        <TextInput
+          placeholder="Search foods"
+          value={search}
+          onChangeText={setSearch}
+          style={{ marginLeft: 8, flex: 1 }}
+        />
       </View>
 
-      <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginTop: 16, paddingLeft: 16 }}>
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        style={{ marginTop: 16, paddingLeft: 16 }}
+      >
         {categories.map((cat) => (
           <Pressable
             key={cat.id}
@@ -77,10 +107,16 @@ export default function HomeScreen() {
               paddingHorizontal: 18,
               paddingVertical: 8,
               borderRadius: 20,
-              backgroundColor: selectedCategory === cat.name ? cat.color : "#f2f2f2",
+              backgroundColor:
+                selectedCategory === cat.name ? cat.color : "#f2f2f2",
             }}
           >
-            <Text style={{ color: selectedCategory === cat.name ? "#fff" : "#333", fontWeight: "600" }}>
+            <Text
+              style={{
+                color: selectedCategory === cat.name ? "#fff" : "#333",
+                fontWeight: "600",
+              }}
+            >
               {cat.name}
             </Text>
           </Pressable>
@@ -89,7 +125,16 @@ export default function HomeScreen() {
 
       <View style={{ padding: 16 }}>
         {filteredFoods.map((item) => (
-          <FoodCard key={item.id} item={item} onPress={() => router.push(`/details/${item.id}/`)} />
+          <FoodCard
+            key={item.id}
+            item={item}
+            onPress={() =>
+              router.push({
+                pathname: "/details/[id]",
+                params: { id: item.id },
+              })
+            }
+          />
         ))}
       </View>
     </ScrollView>
