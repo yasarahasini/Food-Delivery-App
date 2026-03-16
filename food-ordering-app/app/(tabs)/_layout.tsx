@@ -1,10 +1,10 @@
-import { CartProvider } from "@/app/context/CartContext";
+
 import { Tabs } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 
 export default function RootLayout() {
   return (
-    <CartProvider>
+
       <Tabs screenOptions={{ 
         tabBarShowLabel: false,
         headerShown: false
@@ -27,6 +27,6 @@ export default function RootLayout() {
           }}
         />
       </Tabs>
-    </CartProvider>
+
   );
 }
