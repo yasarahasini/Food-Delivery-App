@@ -11,12 +11,12 @@ const FoodCard = ({ item, onPress }: any) => (
       flexDirection: "row",
       alignItems: "center",
       backgroundColor: "#fff",
-      borderRadius: 16, // Smoother corners
-      padding: 10, // More compact padding
+      borderRadius: 16,
+      padding: 10, 
       marginBottom: 12,
-      opacity: pressed ? 0.9 : 1, // Add feedback on press
+      opacity: pressed ? 0.9 : 1, 
 
-      // Professional Shadow
+     
       ...Platform.select({
         ios: {
           shadowColor: "#000",
@@ -33,9 +33,9 @@ const FoodCard = ({ item, onPress }: any) => (
     <Image
       source={item.image}
       style={{
-        width: 70, // --> Reduced image size (podi kala)
-        height: 70, // --> Reduced image size (podi kala)
-        borderRadius: 12, // Compact corners for image
+        width: 70, 
+        height: 70, 
+        borderRadius: 12, 
         marginRight: 12,
       }}
       resizeMode="cover"
@@ -45,7 +45,7 @@ const FoodCard = ({ item, onPress }: any) => (
       <Text
         numberOfLines={1}
         style={{
-          fontSize: 16, // More professional size
+          fontSize: 16, 
           fontWeight: "600",
           color: "#1a1a1a",
         }}
@@ -95,10 +95,10 @@ export default function HomeScreen() {
     <View style={{ flex: 1, backgroundColor: "#fbfbfe" }}>
       <ScrollView
         showsVerticalScrollIndicator={false}
-        stickyHeaderIndices={[1]} // Makes category bar sticky
+        stickyHeaderIndices={[1]} 
         contentContainerStyle={{ paddingBottom: 30 }}
       >
-        {/* HEADER */}
+       
         <View
           style={{
             padding: 20,
@@ -143,9 +143,9 @@ export default function HomeScreen() {
           </View>
         </View>
 
-        {/* SEARCH & CATEGORY (In a view for sticky effect) */}
+   
         <View style={{ backgroundColor: '#fbfbfe', paddingTop: 10, paddingBottom: 5 }}>
-          {/* SEARCH */}
+      
           <View
             style={{
               flexDirection: "row",
@@ -156,7 +156,7 @@ export default function HomeScreen() {
               paddingHorizontal: 12,
               height: 48,
               borderWidth: 1,
-              borderColor: '#eee', // Subtle border
+              borderColor: '#eee', 
             }}
           >
             <Ionicons name="search" size={18} color="#999" />
@@ -169,7 +169,7 @@ export default function HomeScreen() {
             />
           </View>
 
-          {/* CATEGORY */}
+       
           <ScrollView
             horizontal
             showsHorizontalScrollIndicator={false}
@@ -203,7 +203,6 @@ export default function HomeScreen() {
           </ScrollView>
         </View>
 
-        {/* FOOD LIST */}
         <View style={{ paddingHorizontal: 16 }}>
           {filteredFoods.map((item) => (
             <FoodCard
