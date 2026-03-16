@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, TextInput, Image, Pressable, Platform } from "react-native";
+import { View, Text, ScrollView, TextInput, Image, Pressable, Platform, StyleSheet } from "react-native";
 import { useState } from "react";
 import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
@@ -12,11 +12,9 @@ const FoodCard = ({ item, onPress }: any) => (
       alignItems: "center",
       backgroundColor: "#fff",
       borderRadius: 16,
-      padding: 10, 
+      padding: 10,
       marginBottom: 12,
-      opacity: pressed ? 0.9 : 1, 
-
-     
+      opacity: pressed ? 0.9 : 1,
       ...Platform.select({
         ios: {
           shadowColor: "#000",
@@ -33,9 +31,9 @@ const FoodCard = ({ item, onPress }: any) => (
     <Image
       source={item.image}
       style={{
-        width: 70, 
-        height: 70, 
-        borderRadius: 12, 
+        width: 70,
+        height: 70,
+        borderRadius: 12,
         marginRight: 12,
       }}
       resizeMode="cover"
@@ -45,7 +43,7 @@ const FoodCard = ({ item, onPress }: any) => (
       <Text
         numberOfLines={1}
         style={{
-          fontSize: 16, 
+          fontSize: 16,
           fontWeight: "600",
           color: "#1a1a1a",
         }}
@@ -84,6 +82,7 @@ export default function HomeScreen() {
   const router = useRouter();
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [search, setSearch] = useState("");
+  const [activeTab, setActiveTab] = useState("home"); 
 
   const filteredFoods = foods.filter((food) => {
     const matchCategory = selectedCategory === "All" || food.category === selectedCategory;
@@ -93,10 +92,11 @@ export default function HomeScreen() {
 
   return (
     <View style={{ flex: 1, backgroundColor: "#fbfbfe" }}>
+    
       <ScrollView
         showsVerticalScrollIndicator={false}
-        stickyHeaderIndices={[1]} 
-        contentContainerStyle={{ paddingBottom: 30 }}
+        stickyHeaderIndices={[1]}
+        contentContainerStyle={{ paddingBottom: 100 }} 
       >
        
         <View
@@ -143,9 +143,8 @@ export default function HomeScreen() {
           </View>
         </View>
 
-   
+     
         <View style={{ backgroundColor: '#fbfbfe', paddingTop: 10, paddingBottom: 5 }}>
-      
           <View
             style={{
               flexDirection: "row",
@@ -156,7 +155,7 @@ export default function HomeScreen() {
               paddingHorizontal: 12,
               height: 48,
               borderWidth: 1,
-              borderColor: '#eee', 
+              borderColor: '#eee',
             }}
           >
             <Ionicons name="search" size={18} color="#999" />
@@ -169,7 +168,6 @@ export default function HomeScreen() {
             />
           </View>
 
-       
           <ScrollView
             horizontal
             showsHorizontalScrollIndicator={false}
@@ -203,6 +201,7 @@ export default function HomeScreen() {
           </ScrollView>
         </View>
 
+      
         <View style={{ paddingHorizontal: 16 }}>
           {filteredFoods.map((item) => (
             <FoodCard
@@ -218,6 +217,73 @@ export default function HomeScreen() {
           ))}
         </View>
       </ScrollView>
+
+   
+      <View style={styles.tabBar}>
+        <Pressable 
+          onPress={() => setActiveTab("home")} 
+          style={styles.tabItem}
+        >
+          <Ionicons 
+            name={activeTab === "home" ? "home" : "home-outline"} 
+            size={24} 
+            color={activeTab === "home" ? "#ff7a00" : "#999"} 
+          />
+          <Text style={[styles.tabText, { color: activeTab === "home" ? "#ff7a00" : "#999" }]}>
+            Home
+          </Text>
+        </Pressable>
+
+        <Pressable 
+          onPress={() => {
+            setActiveTab("profile");
+             router.push("/profile"); 
+          }} 
+          style={styles.tabItem}
+        >
+          <Ionicons 
+            name={activeTab === "profile" ? "person" : "person-outline"} 
+            size={24} 
+            color={activeTab === "profile" ? "#ff7a00" : "#999"} 
+          />
+          <Text style={[styles.tabText, { color: activeTab === "profile" ? "#ff7a00" : "#999" }]}>
+            Profile
+          </Text>
+        </Pressable>
+      </View>
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  tabBar: {
+    flexDirection: "row",
+    height: Platform.OS === "ios" ? 85 : 65,
+    backgroundColor: "#fff",
+    borderTopWidth: 1,
+    borderTopColor: "#eee",
+    justifyContent: "space-around",
+    alignItems: "center",
+    paddingBottom: Platform.OS === "ios" ? 20 : 0,
+    position: "absolute",
+    bottom: 0,
+    left: 0,
+    right: 0,
+    // Add shadow to make it pop
+    shadowColor: "#000",
+    shadowOpacity: 0.1,
+    shadowOffset: { width: 0, height: -2 },
+    shadowRadius: 10,
+    elevation: 20,
+  },
+  tabItem: {
+    alignItems: "center",
+    justifyContent: "center",
+    flex: 1,
+  },
+  tabText: {
+    fontSize: 12,
+    marginTop: 4,
+    fontWeight: "500",
+  },
+});

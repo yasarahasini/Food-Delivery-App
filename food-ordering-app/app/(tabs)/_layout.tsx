@@ -1,32 +1,59 @@
-
 import { Tabs } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 
-export default function RootLayout() {
+export default function TabLayout() {
   return (
+    <Tabs
+      screenOptions={{
+        headerShown: false,
+        tabBarActiveTintColor: "#ff7a00",
+        tabBarInactiveTintColor: "#999",
+        tabBarStyle: {
+          height: 60,
+          paddingBottom: 6,
+          paddingTop: 6,
+        },
+      }}
+    >
+      <Tabs.Screen
+        name="index"
+        options={{
+          title: "Home",
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="home" size={size} color={color} />
+          ),
+        }}
+      />
 
-      <Tabs screenOptions={{ 
-        tabBarShowLabel: false,
-        headerShown: false
-      }}>
-        <Tabs.Screen
-          name="index"
-          options={{
-            tabBarIcon: ({ color, size }) => (
-              <Ionicons name="fast-food" size={size} color={color} />
-            ),
-          }}
-        />
+      <Tabs.Screen
+        name="categories"
+        options={{
+          title: "Categories",
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="grid" size={size} color={color} />
+          ),
+        }}
+      />
 
-        <Tabs.Screen
-          name="cart/page"
-          options={{
-            tabBarIcon: ({ color, size }) => (
-              <Ionicons name="cart" size={size} color={color} />
-            ),
-          }}
-        />
-      </Tabs>
+      <Tabs.Screen
+        name="profile"
+        options={{
+          title: "Profile",
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="person" size={size} color={color} />
+          ),
+        }}
+      />
 
+      <Tabs.Screen
+        name="settings"
+        options={{
+          title: "Settings",
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="settings" size={size} color={color} />
+          ),
+        }}
+      />
+    </Tabs>
   );
 }
