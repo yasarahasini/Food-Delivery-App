@@ -1,13 +1,13 @@
 import { View, Text, Image, ScrollView, Pressable, StyleSheet, Platform } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
-import { foods } from "../../types/Food"; // Ensure this path matches your project
+import { foods } from "../../types/Food"; 
 
 export default function DetailsScreen() {
   const { id } = useLocalSearchParams();
   const router = useRouter();
 
-  // Find the food item that matches the ID in the URL
+ 
   const item = foods.find((f) => f.id.toString() === id);
 
   if (!item) {
@@ -20,17 +20,17 @@ export default function DetailsScreen() {
 
   return (
     <View style={{ flex: 1, backgroundColor: "#fff" }}>
-      {/* HEADER IMAGE */}
+    
       <View style={styles.imageContainer}>
         <Image source={item.image} style={styles.mainImage} resizeMode="cover" />
         
-        {/* BACK BUTTON */}
+     
         <Pressable onPress={() => router.back()} style={styles.backButton}>
           <Ionicons name="arrow-back" size={24} color="#333" />
         </Pressable>
       </View>
 
-      {/* CONTENT CARD */}
+    
       <ScrollView 
         style={styles.contentScroll}
         showsVerticalScrollIndicator={false}
@@ -57,11 +57,16 @@ export default function DetailsScreen() {
             any time of the day.
           </Text>
 
-          {/* ADD TO CART BUTTON */}
-          <Pressable style={styles.addToCartBtn}>
-            <Text style={styles.cartBtnText}>Add to Order</Text>
-            <Ionicons name="cart-outline" size={20} color="#fff" style={{marginLeft: 10}} />
-          </Pressable>
+     
+
+
+<Pressable 
+  style={styles.addToCartBtn}
+  onPress={() => router.push("/cart/page")} 
+>
+  <Text style={styles.cartBtnText}>Add to Order</Text>
+  <Ionicons name="cart-outline" size={20} color="#fff" style={{marginLeft: 10}} />
+</Pressable>
         </View>
       </ScrollView>
     </View>
