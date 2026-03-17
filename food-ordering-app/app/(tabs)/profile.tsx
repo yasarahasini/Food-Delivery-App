@@ -1,15 +1,15 @@
 import { View, Text, Image, Pressable, ScrollView, Platform, StyleSheet } from "react-native";
 import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
+import { LinearGradient } from "expo-linear-gradient";
 
 export default function ProfileScreen() {
   const router = useRouter();
 
-
   const user = {
     name: "Yasara",
     location: "Colombo, Sri Lanka",
-    email: "yasara@example.com",
+    email: "yasara@gmail.com",
     avatar: require("../../assets/images/yasara.png"),
     orders: 12,
     favorites: 5,
@@ -36,13 +36,17 @@ export default function ProfileScreen() {
     <View style={{ flex: 1, backgroundColor: "#fbfbfe" }}>
       <ScrollView showsVerticalScrollIndicator={false}>
         
-     
-        <View style={styles.header}>
+        <LinearGradient
+          colors={["#ff7a00", "#ec5f0d", "#ff1e00"]}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 1 }}
+          style={styles.header}
+        >
           <Pressable 
             onPress={() => router.back()} 
             style={styles.backButton}
           >
-            <Ionicons name="arrow-back" size={24} color="#fff" />
+            <Ionicons name="arrow-back" size={24} color="#333" />
           </Pressable>
           
           <View style={styles.profileInfo}>
@@ -50,9 +54,8 @@ export default function ProfileScreen() {
             <Text style={styles.userName}>{user.name}</Text>
             <Text style={styles.userEmail}>{user.email}</Text>
           </View>
-        </View>
+        </LinearGradient>
 
-       
         <View style={styles.statsRow}>
           <View style={styles.statCard}>
             <Text style={styles.statNumber}>{user.orders}</Text>
@@ -68,16 +71,29 @@ export default function ProfileScreen() {
           </View>
         </View>
 
-      
+        {/* Menu */}
         <View style={styles.menuSection}>
           <Text style={styles.sectionTitle}>Account Settings</Text>
-          <MenuOption icon="person-outline" title="Edit Profile" subtitle="Change your details" color="#ff7a00" />
+
+          <MenuOption
+            icon="person-outline"
+            title="Edit Profile"
+            subtitle="Change your details"
+            color="#ff7a00"
+            onPress={() => router.push("/editprofile/page")}
+          />
           <MenuOption icon="location-outline" title="Shipping Address" subtitle="Home, Work..." color="#4CAF50" />
           <MenuOption icon="card-outline" title="Payment Methods" subtitle="Visa **4242" color="#2196F3" />
           
           <Text style={[styles.sectionTitle, { marginTop: 25 }]}>General</Text>
           <MenuOption icon="notifications-outline" title="Notifications" color="#673AB7" />
-          <MenuOption icon="help-circle-outline" title="Help Center" color="#00BCD4" />
+        <MenuOption
+            icon="person-outline"
+            title="Help Center"
+            subtitle="Get assistance"
+            color="#ff7a00"
+            onPress={() => router.push("/helpcenter/page")}
+          />
           
           <Pressable style={styles.logoutButton}>
             <Ionicons name="log-out-outline" size={22} color="#FF3B30" />
@@ -92,7 +108,6 @@ export default function ProfileScreen() {
 
 const styles = StyleSheet.create({
   header: {
-    backgroundColor: "#ff7a00",
     paddingTop: Platform.OS === 'ios' ? 60 : 40,
     paddingBottom: 40,
     borderBottomLeftRadius: 30,
@@ -112,17 +127,17 @@ const styles = StyleSheet.create({
     height: 100,
     borderRadius: 50,
     borderWidth: 4,
-    borderColor: "rgba(255,255,255,0.3)",
+    borderColor: "rgba(255,255,255,0.4)",
     marginBottom: 10,
   },
   userName: {
     fontSize: 22,
     fontWeight: "bold",
-    color: "#fff",
+    color: "#222",
   },
   userEmail: {
     fontSize: 14,
-    color: "rgba(255,255,255,0.8)",
+    color: "#444",
   },
   statsRow: {
     flexDirection: 'row',
