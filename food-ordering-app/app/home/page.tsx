@@ -221,7 +221,7 @@ export default function HomeScreen() {
    
       <View style={styles.tabBar}>
         <Pressable 
-          onPress={() => setActiveTab("home")} 
+          onPress={() => setActiveTab("/home/page")} 
           style={styles.tabItem}
         >
           <Ionicons 
@@ -269,7 +269,7 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
-    // Add shadow to make it pop
+  
     shadowColor: "#000",
     shadowOpacity: 0.1,
     shadowOffset: { width: 0, height: -2 },

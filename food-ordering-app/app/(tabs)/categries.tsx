@@ -31,7 +31,7 @@ export default function CategoriesScreen() {
 
   return (
     <View style={styles.container}>
-      {/* Header */}
+    
       <View style={styles.header}>
         <Pressable onPress={() => router.back()} style={styles.backButton}>
           <Ionicons name="arrow-back" size={24} color="#333" />
@@ -121,7 +121,7 @@ const styles = StyleSheet.create({
     width: COLUMN_WIDTH,
     marginBottom: 15,
     borderRadius: 20,
-    // Shadow for iOS/Android
+   
     elevation: 4,
     shadowColor: '#000',
     shadowOpacity: 0.1,

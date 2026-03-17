@@ -71,8 +71,7 @@ export default function ProfileScreen() {
           </View>
         </View>
 
-        {/* Menu */}
-        <View style={styles.menuSection}>
+         <View style={styles.menuSection}>
           <Text style={styles.sectionTitle}>Account Settings</Text>
 
           <MenuOption
