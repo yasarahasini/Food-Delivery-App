@@ -1,80 +1,23 @@
-import { View, Text, ScrollView, TextInput, Image, Pressable, Platform, StyleSheet } from "react-native";
+import { View, Text, ScrollView, TextInput, Image, Pressable, Platform, StyleSheet, Dimensions } from "react-native";
 import { useState } from "react";
 import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { categories, foods } from "../types/Food";
 
+const { width } = Dimensions.get("window");
+
 const FoodCard = ({ item, onPress }: any) => (
-  <Pressable
-    onPress={onPress}
-    style={({ pressed }) => ({
-      flexDirection: "row",
-      alignItems: "center",
-      backgroundColor: "#fff",
-      borderRadius: 16,
-      padding: 10,
-      marginBottom: 12,
-      opacity: pressed ? 0.9 : 1,
-      ...Platform.select({
-        ios: {
-          shadowColor: "#000",
-          shadowOpacity: 0.06,
-          shadowOffset: { width: 0, height: 4 },
-          shadowRadius: 10,
-        },
-        android: {
-          elevation: 3,
-        },
-      }),
-    })}
-  >
-    <Image
-      source={item.image}
-      style={{
-        width: 70,
-        height: 70,
-        borderRadius: 12,
-        marginRight: 12,
-      }}
-      resizeMode="cover"
-    />
-
-    <View style={{ flex: 1, justifyContent: 'center' }}>
-      <Text
-        numberOfLines={1}
-        style={{
-          fontSize: 16,
-          fontWeight: "600",
-          color: "#1a1a1a",
-        }}
-      >
-        {item.name}
-      </Text>
-
-      <Text
-        numberOfLines={1}
-        style={{
-          fontSize: 13,
-          color: "#777",
-          marginTop: 2,
-        }}
-      >
-        Delicious & fresh
-      </Text>
-
-      <Text
-        style={{
-          fontSize: 15,
-          fontWeight: "bold",
-          marginTop: 6,
-          color: "#ff7a00",
-        }}
-      >
-        ${item.price.toFixed(2)}
-      </Text>
+  <Pressable onPress={onPress} style={styles.foodCard}>
+    <Image source={item.image} style={styles.cardImage} resizeMode="cover" />
+    <View style={styles.cardContent}>
+      <View>
+        <Text numberOfLines={1} style={styles.cardTitle}>{item.name}</Text>
+        <Text style={styles.cardSubtitle}>⭐ 4.8 • 20-30 min</Text>
+      </View>
+      <View style={styles.priceTag}>
+        <Text style={styles.priceText}>${item.price.toFixed(2)}</Text>
+      </View>
     </View>
-
-    <Ionicons name="chevron-forward" size={18} color="#ccc" style={{ marginLeft: 8 }} />
   </Pressable>
 );
 
@@ -82,7 +25,7 @@ export default function HomeScreen() {
   const router = useRouter();
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [search, setSearch] = useState("");
-  const [activeTab, setActiveTab] = useState("home"); 
+  const [activeTab, setActiveTab] = useState("home");
 
   const filteredFoods = foods.filter((food) => {
     const matchCategory = selectedCategory === "All" || food.category === selectedCategory;
@@ -91,164 +34,103 @@ export default function HomeScreen() {
   });
 
   return (
-    <View style={{ flex: 1, backgroundColor: "#fbfbfe" }}>
-    
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        stickyHeaderIndices={[1]}
-        contentContainerStyle={{ paddingBottom: 100 }} 
-      >
-       
-        <View
-          style={{
-            padding: 20,
-            paddingTop: Platform.OS === 'ios' ? 60 : 40,
-            backgroundColor: "#ff7a00",
-            borderBottomLeftRadius: 25,
-            borderBottomRightRadius: 25,
-          }}
-        >
-          <Text style={{ color: "rgba(255,255,255,0.8)", fontSize: 14 }}>
-            Deliver to
-          </Text>
-
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "space-between",
-              alignItems: "center",
-              marginTop: 4,
-            }}
-          >
-            <Text
-              style={{
-                fontSize: 20,
-                fontWeight: "bold",
-                color: "#fff",
-              }}
-            >
-              Colombo, Sri Lanka
-            </Text>
-
-            <Image
-              source={require("../../assets/images/yasara.png")}
-              style={{
-                width: 44,
-                height: 44,
-                borderRadius: 22,
-                borderWidth: 2,
-                borderColor: "#fff",
-              }}
-            />
-          </View>
-        </View>
-
+    <View style={styles.container}>
      
-        <View style={{ backgroundColor: '#fbfbfe', paddingTop: 10, paddingBottom: 5 }}>
-          <View
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              backgroundColor: "#fff",
-              marginHorizontal: 16,
-              borderRadius: 14,
-              paddingHorizontal: 12,
-              height: 48,
-              borderWidth: 1,
-              borderColor: '#eee',
-            }}
-          >
-            <Ionicons name="search" size={18} color="#999" />
-            <TextInput
-              placeholder="Search your favorite food..."
-              placeholderTextColor="#999"
-              value={search}
-              onChangeText={setSearch}
-              style={{ marginLeft: 8, flex: 1, fontSize: 15, color: '#333' }}
-            />
+      <View style={styles.header}>
+        <View style={styles.headerTop}>
+          <View>
+            <Text style={styles.greeting}>Good Morning,</Text>
+            <View style={styles.locationRow}>
+              <Ionicons name="location" size={16} color="#fff" />
+              <Text style={styles.locationText}>Colombo, Sri Lanka</Text>
+              <Ionicons name="chevron-down" size={14} color="#fff" />
+            </View>
           </View>
-
-          <ScrollView
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={{ paddingHorizontal: 16, paddingVertical: 15 }}
-          >
-            {categories.map((cat) => (
-              <Pressable
-                key={cat.id}
-                onPress={() => setSelectedCategory(cat.name)}
-                style={{
-                  marginRight: 10,
-                  paddingHorizontal: 18,
-                  paddingVertical: 8,
-                  borderRadius: 20,
-                  backgroundColor: selectedCategory === cat.name ? "#ff7a00" : "#fff",
-                  borderWidth: selectedCategory === cat.name ? 0 : 1,
-                  borderColor: '#eee',
-                }}
-              >
-                <Text
-                  style={{
-                    fontSize: 14,
-                    fontWeight: "600",
-                    color: selectedCategory === cat.name ? "#fff" : "#555",
-                  }}
-                >
-                  {cat.name}
-                </Text>
-              </Pressable>
-            ))}
-          </ScrollView>
+          <Pressable onPress={() => router.push("/profile")}>
+            <Image 
+              source={require("../../assets/images/yasara.png")} 
+              style={styles.profileImg} 
+            />
+          </Pressable>
         </View>
 
       
-        <View style={{ paddingHorizontal: 16 }}>
+        <View style={styles.searchWrapper}>
+          <Ionicons name="search-outline" size={20} color="#999" />
+          <TextInput
+            placeholder="Search cravings..."
+            placeholderTextColor="#999"
+            value={search}
+            onChangeText={setSearch}
+            style={styles.searchInput}
+          />
+          <View style={styles.filterCircle}>
+            <Ionicons name="options-outline" size={20} color="#ff7a00" />
+          </View>
+        </View>
+      </View>
+
+      <ScrollView 
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: 120 }}
+      >
+       
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={styles.categoryContainer}
+        >
+          {categories.map((cat) => (
+            <Pressable
+              key={cat.id}
+              onPress={() => setSelectedCategory(cat.name)}
+              style={[
+                styles.catChip,
+                selectedCategory === cat.name && styles.catChipActive
+              ]}
+            >
+              <Text style={[
+                styles.catText,
+                selectedCategory === cat.name && styles.catTextActive
+              ]}>
+                {cat.name}
+              </Text>
+            </Pressable>
+          ))}
+        </ScrollView>
+
+    
+        <View style={styles.sectionHeader}>
+          <Text style={styles.sectionTitle}>Popular Now</Text>
+          <Text style={styles.seeAll}>See All</Text>
+        </View>
+
+        <View style={styles.foodGrid}>
           {filteredFoods.map((item) => (
             <FoodCard
               key={item.id}
               item={item}
-              onPress={() =>
-                router.push({
-                  pathname: "/details/[id]/",
-                  params: { id: item.id },
-                })
-              }
+              onPress={() => router.push({ pathname: "/details/[id]/", params: { id: item.id } })}
             />
           ))}
         </View>
       </ScrollView>
 
-   
-      <View style={styles.tabBar}>
-        <Pressable 
-          onPress={() => setActiveTab("/home/page")} 
-          style={styles.tabItem}
-        >
-          <Ionicons 
-            name={activeTab === "home" ? "home" : "home-outline"} 
-            size={24} 
-            color={activeTab === "home" ? "#ff7a00" : "#999"} 
-          />
-          <Text style={[styles.tabText, { color: activeTab === "home" ? "#ff7a00" : "#999" }]}>
-            Home
-          </Text>
+      <View style={styles.floatingTabs}>
+        <Pressable onPress={() => setActiveTab("home")} style={styles.tabItem}>
+          <Ionicons name={activeTab === "home" ? "home" : "home-outline"} size={22} color={activeTab === "home" ? "#ff7a00" : "#999"} />
+          {activeTab === "home" && <View style={styles.activeDot} />}
+        </Pressable>
+        
+        <Pressable onPress={() => router.push("/cart")} style={styles.cartCenterBtn}>
+            <View style={styles.cartInner}>
+                <Ionicons name="cart" size={26} color="#fff" />
+            </View>
         </Pressable>
 
-        <Pressable 
-          onPress={() => {
-            setActiveTab("profile");
-             router.push("/profile"); 
-          }} 
-          style={styles.tabItem}
-        >
-          <Ionicons 
-            name={activeTab === "profile" ? "person" : "person-outline"} 
-            size={24} 
-            color={activeTab === "profile" ? "#ff7a00" : "#999"} 
-          />
-          <Text style={[styles.tabText, { color: activeTab === "profile" ? "#ff7a00" : "#999" }]}>
-            Profile
-          </Text>
+        <Pressable onPress={() => { setActiveTab("profile"); router.push("/profile"); }} style={styles.tabItem}>
+          <Ionicons name={activeTab === "profile" ? "person" : "person-outline"} size={22} color={activeTab === "profile" ? "#ff7a00" : "#999"} />
+          {activeTab === "profile" && <View style={styles.activeDot} />}
         </Pressable>
       </View>
     </View>
@@ -256,34 +138,96 @@ export default function HomeScreen() {
 }
 
 const styles = StyleSheet.create({
-  tabBar: {
-    flexDirection: "row",
-    height: Platform.OS === "ios" ? 85 : 65,
-    backgroundColor: "#fff",
-    borderTopWidth: 1,
-    borderTopColor: "#eee",
-    justifyContent: "space-around",
-    alignItems: "center",
-    paddingBottom: Platform.OS === "ios" ? 20 : 0,
-    position: "absolute",
-    bottom: 0,
-    left: 0,
-    right: 0,
+  container: { flex: 1, backgroundColor: "#fbfbfe" },
+  header: {
+    backgroundColor: "#ff7a00",
+    paddingTop: Platform.OS === 'ios' ? 60 : 40,
+    paddingHorizontal: 20,
+    paddingBottom: 40,
+    borderBottomLeftRadius: 40,
+    borderBottomRightRadius: 40,
+  },
+  headerTop: { flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: 25 },
+  greeting: { color: "rgba(255,255,255,0.7)", fontSize: 14, fontWeight: "600" },
+  locationRow: { flexDirection: "row", alignItems: "center", gap: 5, marginTop: 2 },
+  locationText: { color: "#fff", fontSize: 18, fontWeight: "bold" },
+  profileImg: { width: 48, height: 48, borderRadius: 16, borderWidth: 2, borderColor: "rgba(255,255,255,0.3)" },
   
+  searchWrapper: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#fff",
+    borderRadius: 20,
+    paddingHorizontal: 15,
+    height: 55,
+    position: 'absolute',
+    bottom: -27,
+    left: 20,
+    right: 20,
     shadowColor: "#000",
     shadowOpacity: 0.1,
-    shadowOffset: { width: 0, height: -2 },
+    shadowRadius: 15,
+    elevation: 10,
+  },
+  searchInput: { flex: 1, marginLeft: 10, fontSize: 15, fontWeight: "500" },
+  filterCircle: { backgroundColor: "#fff5ed", padding: 8, borderRadius: 12 },
+
+  categoryContainer: { paddingHorizontal: 20, marginTop: 45, marginBottom: 20 },
+  catChip: { paddingHorizontal: 20, paddingVertical: 10, borderRadius: 15, backgroundColor: "#fff", marginRight: 10, borderWidth: 1, borderColor: "#f0f0f0" },
+  catChipActive: { backgroundColor: "#1a1a1a", borderColor: "#1a1a1a" },
+  catText: { color: "#888", fontWeight: "700", fontSize: 13 },
+  catTextActive: { color: "#fff" },
+
+  sectionHeader: { flexDirection: "row", justifyContent: "space-between", paddingHorizontal: 20, marginBottom: 15, alignItems: 'center' },
+  sectionTitle: { fontSize: 20, fontWeight: "800", color: "#1a1a1a" },
+  seeAll: { color: "#ff7a00", fontWeight: "700" },
+
+  foodGrid: { paddingHorizontal: 20 },
+  foodCard: { 
+    backgroundColor: "#fff", 
+    borderRadius: 24, 
+    marginBottom: 20, 
+    overflow: "hidden",
+    shadowColor: "#000",
+    shadowOpacity: 0.05,
     shadowRadius: 10,
-    elevation: 20,
+    elevation: 5
   },
-  tabItem: {
+  cardImage: { width: "100%", height: 180 },
+  cardContent: { padding: 15, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
+  cardTitle: { fontSize: 17, fontWeight: "800", color: "#1a1a1a", marginBottom: 4 },
+  cardSubtitle: { fontSize: 12, color: "#999", fontWeight: "600" },
+  priceTag: { backgroundColor: "#1a1a1a", paddingHorizontal: 12, paddingVertical: 6, borderRadius: 12 },
+  priceText: { color: "#fff", fontWeight: "800", fontSize: 14 },
+
+  floatingTabs: {
+    position: "absolute",
+    bottom: 30,
+    left: 40,
+    right: 40,
+    height: 70,
+    backgroundColor: "#fff",
+    borderRadius: 30,
+    flexDirection: "row",
     alignItems: "center",
-    justifyContent: "center",
-    flex: 1,
+    justifyContent: "space-around",
+    shadowColor: "#000",
+    shadowOpacity: 0.1,
+    shadowRadius: 20,
+    elevation: 15,
   },
-  tabText: {
-    fontSize: 12,
-    marginTop: 4,
-    fontWeight: "500",
+  tabItem: { alignItems: "center" },
+  activeDot: { width: 4, height: 4, borderRadius: 2, backgroundColor: "#ff7a00", marginTop: 4 },
+  cartCenterBtn: { 
+    marginTop: -40, 
+    backgroundColor: "#ff7a00", 
+    width: 65, 
+    height: 65, 
+    borderRadius: 32.5, 
+    justifyContent: "center", 
+    alignItems: "center",
+    borderWidth: 6,
+    borderColor: "#fbfbfe"
   },
+  cartInner: { alignItems: 'center', justifyContent: 'center' }
 });

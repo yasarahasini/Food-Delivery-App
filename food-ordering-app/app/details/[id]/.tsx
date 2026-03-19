@@ -1,13 +1,15 @@
-import { View, Text, Image, ScrollView, Pressable, StyleSheet, Platform } from "react-native";
+import React from "react";
+import { View, Text, ImageBackground, ScrollView, Pressable, StyleSheet, Platform, Dimensions } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
-import { foods } from "../../types/Food"; 
+import { foods } from "../../types/Food";
+
+const { height } = Dimensions.get("window");
 
 export default function DetailsScreen() {
   const { id } = useLocalSearchParams();
   const router = useRouter();
 
- 
   const item = foods.find((f) => f.id.toString() === id);
 
   if (!item) {
@@ -19,101 +21,203 @@ export default function DetailsScreen() {
   }
 
   return (
-    <View style={{ flex: 1, backgroundColor: "#fff" }}>
-    
-      <View style={styles.imageContainer}>
-        <Image source={item.image} style={styles.mainImage} resizeMode="cover" />
+    <View style={styles.mainContainer}>
+      
+      <ImageBackground source={item.image} style={styles.heroImage}>
+        <View style={styles.overlay} />
         
-     
-        <Pressable onPress={() => router.back()} style={styles.backButton}>
-          <Ionicons name="arrow-back" size={24} color="#333" />
-        </Pressable>
-      </View>
+   
+        <View style={styles.headerNav}>
+          <Pressable onPress={() => router.back()} style={styles.glassButton}>
+            <Ionicons name="chevron-back" size={24} color="#000" />
+          </Pressable>
+          <Pressable style={styles.glassButton}>
+            <Ionicons name="heart-outline" size={24} color="#ff4d4d" />
+          </Pressable>
+        </View>
 
     
-      <ScrollView 
-        style={styles.contentScroll}
-        showsVerticalScrollIndicator={false}
-      >
-        <View style={styles.infoContainer}>
-          <View style={styles.titleRow}>
-            <Text style={styles.titleText}>{item.name}</Text>
-            <View style={styles.ratingBadge}>
-              <Ionicons name="star" size={16} color="#FFD700" />
+        <View style={styles.floatingPrice}>
+          <Text style={styles.currency}>$</Text>
+          <Text style={styles.priceValue}>{item.price.toFixed(0)}</Text>
+          <Text style={styles.priceCents}>{(item.price % 1).toFixed(2).substring(1)}</Text>
+        </View>
+      </ImageBackground>
+
+    
+      <View style={styles.sheetContainer}>
+        <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContent}>
+          <View style={styles.indicator} />
+          
+          <View style={styles.metaRow}>
+            <Text style={styles.categoryBadge}>{item.category.toUpperCase()}</Text>
+            <View style={styles.ratingBox}>
+              <Ionicons name="star" size={14} color="#FFD700" />
               <Text style={styles.ratingText}> 4.8</Text>
             </View>
           </View>
 
-          <Text style={styles.categoryText}>{item.category} • Fresh Ingredients</Text>
+          <Text style={styles.mainTitle}>{item.name}</Text>
           
-          <Text style={styles.priceText}>${item.price.toFixed(2)}</Text>
+          <View style={styles.statsRow}>
+            <View style={styles.statItem}>
+              <Ionicons name="time-outline" size={20} color="#888" />
+              <Text style={styles.statText}>25 min</Text>
+            </View>
+            <View style={[styles.statItem, { borderLeftWidth: 1, borderRightWidth: 1, borderColor: '#eee' }]}>
+              <Ionicons name="flame-outline" size={20} color="#888" />
+              <Text style={styles.statText}>450 Cal</Text>
+            </View>
+            <View style={styles.statItem}>
+              <Ionicons name="leaf-outline" size={20} color="#888" />
+              <Text style={styles.statText}>Organic</Text>
+            </View>
+          </View>
 
-          <View style={styles.divider} />
-
-          <Text style={styles.sectionTitle}>Description</Text>
-          <Text style={styles.descriptionText}>
-            Enjoy our world-class {item.name}, prepared with the freshest 
-            ingredients and delivered hot to your doorstep. Perfect for 
-            any time of the day.
+          <Text style={styles.descriptionHeader}>The Story</Text>
+          <Text style={styles.descriptionBody}>
+            Experience the artisanal craft of our {item.name}. Every layer is designed to 
+            provoke the senses, using locally sourced ingredients and traditional slow-cooking 
+            techniques that define our kitchen's philosophy.
           </Text>
+        </ScrollView>
 
-     
-
-
-<Pressable 
-  style={styles.addToCartBtn}
-  onPress={() => router.push("/cart/page")} 
->
-  <Text style={styles.cartBtnText}>Add to Order</Text>
-  <Ionicons name="cart-outline" size={20} color="#fff" style={{marginLeft: 10}} />
-</Pressable>
+    
+        <View style={styles.footer}>
+          <View style={styles.quantityControl}>
+            <Pressable style={styles.qtyBtn}><Text style={styles.qtyBtnText}>-</Text></Pressable>
+            <Text style={styles.qtyText}>1</Text>
+            <Pressable style={styles.qtyBtn}><Text style={styles.qtyBtnText}>+</Text></Pressable>
+          </View>
+          
+          <Pressable 
+            style={styles.ctaButton}
+            onPress={() => router.push("/cart/page")}
+          >
+            <Text style={styles.ctaText}>Add to Order</Text>
+            <View style={styles.ctaIconCircle}>
+              <Ionicons name="chevron-forward" size={18} color="#FF7A00" />
+            </View>
+          </Pressable>
         </View>
-      </ScrollView>
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  center: { flex: 1, justifyContent: "center", alignItems: "center" },
-  imageContainer: { height: 350, width: "100%" },
-  mainImage: { width: "100%", height: "100%" },
-  backButton: {
-    position: "absolute",
-    top: Platform.OS === 'ios' ? 50 : 30,
-    left: 20,
-    backgroundColor: "#fff",
-    padding: 10,
-    borderRadius: 12,
-    elevation: 5,
+  mainContainer: { flex: 1, backgroundColor: "#000" },
+  heroImage: { height: height * 0.55, width: "100%", justifyContent: 'space-between' },
+  overlay: { ...StyleSheet.absoluteFillObject, backgroundColor: 'rgba(0,0,0,0.15)' },
+  
+  headerNav: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingHorizontal: 20,
+    paddingTop: Platform.OS === 'ios' ? 60 : 40,
+  },
+  glassButton: {
+    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+    padding: 12,
+    borderRadius: 18,
     shadowColor: "#000",
+    shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.1,
     shadowRadius: 10,
   },
-  contentScroll: {
-    marginTop: -30,
+  
+  floatingPrice: {
+    position: 'absolute',
+    bottom: 50,
+    right: 25,
+    backgroundColor: '#FF7A00',
+    flexDirection: 'row',
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    borderRadius: 25,
+    alignItems: 'flex-start',
+    elevation: 8,
+    shadowColor: "#FF7A00",
+    shadowOpacity: 0.4,
+    shadowRadius: 15,
+  },
+  currency: { color: '#fff', fontSize: 16, fontWeight: '600', marginTop: 4 },
+  priceValue: { color: '#fff', fontSize: 32, fontWeight: '800' },
+  priceCents: { color: '#fff', fontSize: 16, fontWeight: '600', marginTop: 4 },
+
+  sheetContainer: {
+    flex: 1,
     backgroundColor: "#fff",
-    borderTopLeftRadius: 35,
-    borderTopRightRadius: 35,
-    padding: 25,
+    marginTop: -40,
+    borderTopLeftRadius: 40,
+    borderTopRightRadius: 40,
+    paddingHorizontal: 25,
   },
-  infoContainer: { paddingBottom: 50 },
-  titleRow: { flexDirection: "row", justifyContent: "space-between", alignItems: "center" },
-  titleText: { fontSize: 26, fontWeight: "bold", color: "#1a1a1a", flex: 1 },
-  ratingBadge: { flexDirection: "row", alignItems: "center", backgroundColor: "#fef9e7", padding: 6, borderRadius: 10 },
-  ratingText: { fontWeight: "bold", color: "#f1c40f" },
-  categoryText: { color: "#888", marginTop: 5, fontSize: 14 },
-  priceText: { fontSize: 22, fontWeight: "bold", color: "#ff7a00", marginTop: 15 },
-  divider: { height: 1, backgroundColor: "#eee", marginVertical: 20 },
-  sectionTitle: { fontSize: 18, fontWeight: "700", color: "#1a1a1a", marginBottom: 10 },
-  descriptionText: { color: "#666", lineHeight: 22, fontSize: 15 },
-  addToCartBtn: {
-    backgroundColor: "#ff7a00",
-    marginTop: 30,
-    padding: 18,
-    borderRadius: 20,
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
+  indicator: {
+    width: 40,
+    height: 5,
+    backgroundColor: '#E0E0E0',
+    borderRadius: 10,
+    alignSelf: 'center',
+    marginTop: 15,
+    marginBottom: 25,
   },
-  cartBtnText: { color: "#fff", fontSize: 18, fontWeight: "bold" },
+  metaRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 },
+  categoryBadge: { letterSpacing: 1.5, fontSize: 12, fontWeight: '800', color: '#FF7A00' },
+  ratingBox: { flexDirection: 'row', alignItems: 'center', backgroundColor: '#FFF9E5', paddingHorizontal: 10, paddingVertical: 4, borderRadius: 12 },
+  ratingText: { fontWeight: 'bold', color: '#F1C40F', fontSize: 13 },
+  
+  mainTitle: { fontSize: 32, fontWeight: '900', color: '#1A1A1A', marginBottom: 20 },
+  
+  statsRow: { 
+    flexDirection: 'row', 
+    backgroundColor: '#F8F9FA', 
+    borderRadius: 20, 
+    paddingVertical: 15, 
+    marginBottom: 25 
+  },
+  statItem: { flex: 1, alignItems: 'center', gap: 5 },
+  statText: { fontSize: 13, color: '#666', fontWeight: '600' },
+
+  descriptionHeader: { fontSize: 18, fontWeight: '800', color: '#1A1A1A', marginBottom: 10 },
+  descriptionBody: { fontSize: 15, color: '#777', lineHeight: 24, marginBottom: 100 },
+
+  footer: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    height: 110,
+    backgroundColor: '#fff',
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 25,
+    paddingBottom: 20,
+    borderTopWidth: 1,
+    borderColor: '#F0F0F0'
+  },
+  quantityControl: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#F5F5F5',
+    borderRadius: 15,
+    padding: 5,
+    marginRight: 15,
+  },
+  qtyBtn: { width: 35, height: 35, justifyContent: 'center', alignItems: 'center' },
+  qtyBtnText: { fontSize: 20, fontWeight: '600', color: '#333' },
+  qtyText: { paddingHorizontal: 15, fontSize: 16, fontWeight: '700' },
+
+  ctaButton: {
+    flex: 1,
+    backgroundColor: '#1A1A1A',
+    height: 60,
+    borderRadius: 18,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 12,
+  },
+  ctaText: { color: '#fff', fontSize: 16, fontWeight: '700' },
+  ctaIconCircle: { backgroundColor: '#fff', padding: 4, borderRadius: 10 },
 });

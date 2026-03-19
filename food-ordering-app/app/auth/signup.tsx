@@ -46,9 +46,9 @@ export default function SignupScreen() {
         return;
       }
 
-      // Success message + redirect to home
+     
       Alert.alert("Success", "Account created", [
-        { text: "OK", onPress: () => router.replace("/") }, // home route එක
+        { text: "OK", onPress: () => router.replace("/") }, 
       ]);
 
     } catch (error) {

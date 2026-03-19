@@ -1,161 +1,224 @@
-import { View, Text, ScrollView, TextInput, Pressable, StyleSheet, Platform } from "react-native";
+import { View, Text, ScrollView, TextInput, Pressable, StyleSheet, Platform, Dimensions } from "react-native";
 import { useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
+
+const { width } = Dimensions.get("window");
 
 export default function CheckoutScreen() {
   const router = useRouter();
 
   return (
     <View style={styles.container}>
-    
+  
       <View style={styles.header}>
-        <Pressable onPress={() => router.back()} style={styles.backBtn}>
-          <Ionicons name="chevron-back" size={24} color="#333" />
+        <Pressable onPress={() => router.back()} style={styles.backCircle}>
+          <Ionicons name="chevron-back" size={22} color="#1a1a1a" />
         </Pressable>
-        <Text style={styles.headerTitle}>Checkout</Text>
-        <View style={{ width: 40 }} />
+        <View style={styles.headerCenter}>
+          <Text style={styles.headerTitle}>Checkout</Text>
+          <Text style={styles.headerStep}>Step 2 of 3</Text>
+        </View>
+        <View style={{ width: 45 }} />
       </View>
 
-      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ padding: 20 }}>
+      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollBody}>
         
-     
-        <View style={styles.section}>
-          <View style={styles.sectionHeader}>
-            <Text style={styles.sectionTitle}>Delivery Address</Text>
-            <Pressable><Text style={styles.editLink}>Change</Text></Pressable>
+    
+        <View style={styles.sectionHeader}>
+          <Text style={styles.sectionTitle}>Delivery to</Text>
+          <Pressable><Text style={styles.editLink}>Change</Text></Pressable>
+        </View>
+        
+        <View style={styles.addressCard}>
+          <View style={styles.addressIconBox}>
+            <Ionicons name="home-outline" size={22} color="#FF7A00" />
           </View>
-          <View style={styles.addressCard}>
-            <View style={styles.iconCircle}>
-              <Ionicons name="location" size={20} color="#ff7a00" />
-            </View>
-            <View style={{ flex: 1, marginLeft: 15 }}>
-              <Text style={styles.addressName}>Home</Text>
-              <Text style={styles.addressText}>No. 123, Galle Road, Colombo 03, Sri Lanka</Text>
-            </View>
+          <View style={styles.addressInfo}>
+            <Text style={styles.addressLabel}>Home Address</Text>
+            <Text style={styles.addressSubtext}>No. 123, Galle Road, Colombo 03</Text>
           </View>
+        </View>
+
+        <Text style={[styles.sectionTitle, { marginTop: 30, marginBottom: 15 }]}>Payment Method</Text>
+        <View style={styles.paymentGrid}>
+          <Pressable style={[styles.payItem, styles.payItemActive]}>
+            <Ionicons name="card" size={24} color="#fff" />
+            <Text style={[styles.payItemText, { color: '#fff' }]}>Credit Card</Text>
+            <View style={styles.activeCheck}>
+              <Ionicons name="checkmark-circle" size={16} color="#fff" />
+            </View>
+          </Pressable>
+          
+          <Pressable style={styles.payItem}>
+            <Ionicons name="logo-google" size={24} color="#555" />
+            <Text style={styles.payItemText}>G-Pay</Text>
+          </Pressable>
+          
+          <Pressable style={styles.payItem}>
+            <Ionicons name="wallet-outline" size={24} color="#555" />
+            <Text style={styles.payItemText}>Cash</Text>
+          </Pressable>
         </View>
 
     
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Payment Method</Text>
-          <View style={styles.paymentRow}>
-            <Pressable style={[styles.paymentBtn, styles.activePayment]}>
-              <Ionicons name="card" size={24} color="#fff" />
-              <Text style={[styles.paymentText, { color: '#fff' }]}>Card</Text>
-            </Pressable>
-            <Pressable style={styles.paymentBtn}>
-              <Ionicons name="logo-paypal" size={24} color="#333" />
-              <Text style={styles.paymentText}>PayPal</Text>
-            </Pressable>
-            <Pressable style={styles.paymentBtn}>
-              <Ionicons name="cash" size={24} color="#333" />
-              <Text style={styles.paymentText}>Cash</Text>
-            </Pressable>
-          </View>
-        </View>
-
-        <View style={styles.summaryCard}>
-          <Text style={styles.sectionTitle}>Order Summary</Text>
-          <View style={styles.summaryRow}>
-            <Text style={styles.summaryLabel}>Subtotal</Text>
-            <Text style={styles.summaryValue}>$24.50</Text>
-          </View>
-          <View style={styles.summaryRow}>
-            <Text style={styles.summaryLabel}>Delivery Fee</Text>
-            <Text style={styles.summaryValue}>$2.00</Text>
-          </View>
-          <View style={[styles.summaryRow, { marginTop: 10, paddingTop: 10, borderTopWidth: 1, borderTopColor: '#eee' }]}>
-            <Text style={styles.totalLabel}>Total</Text>
-            <Text style={styles.totalValue}>$26.50</Text>
-          </View>
-        </View>
-
-     
-        <View style={styles.promoContainer}>
+        <View style={styles.promoWrapper}>
+          <Ionicons name="ticket-outline" size={20} color="#999" style={{ marginLeft: 15 }} />
           <TextInput 
-            placeholder="Enter Promo Code" 
+            placeholder="Promo code here..." 
+            placeholderTextColor="#999"
             style={styles.promoInput}
           />
-          <Pressable style={styles.promoBtn}>
-            <Text style={styles.promoBtnText}>Apply</Text>
+          <Pressable style={styles.applyBtn}>
+            <Text style={styles.applyBtnText}>Apply</Text>
           </Pressable>
+        </View>
+
+   
+        <View style={styles.receiptContainer}>
+          <View style={styles.receiptRow}>
+            <Text style={styles.receiptLabel}>Basket Total</Text>
+            <Text style={styles.receiptValue}>$24.50</Text>
+          </View>
+          <View style={styles.receiptRow}>
+            <Text style={styles.receiptLabel}>Delivery Charge</Text>
+            <Text style={styles.receiptValue}>$2.00</Text>
+          </View>
+          <View style={styles.dottedDivider} />
+          <View style={styles.receiptRow}>
+            <Text style={styles.totalLabel}>Grand Total</Text>
+            <Text style={styles.totalPrice}>$26.50</Text>
+          </View>
         </View>
 
       </ScrollView>
 
       <View style={styles.footer}>
-       <Pressable 
-  style={styles.placeOrderBtn}
-  onPress={() => router.push("/driver/page")} 
->
-  <Text style={styles.placeOrderText}>Place Order • $26.50</Text>
-</Pressable>
+        <Pressable 
+          style={styles.mainOrderBtn}
+          onPress={() => router.push("/driver/page")}
+        >
+          <View style={{ flex: 1, alignItems: 'center', marginLeft: 40 }}>
+            <Text style={styles.orderBtnText}>PLACE ORDER</Text>
+          </View>
+          <View style={styles.orderBtnIcon}>
+            <Ionicons name="arrow-forward" size={20} color="#FF7A00" />
+          </View>
+        </Pressable>
       </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#fbfbfe" },
+  container: { flex: 1, backgroundColor: "#F8F9FB" },
+  
   header: {
     flexDirection: "row",
-    justifyContent: "space-between",
     alignItems: "center",
+    justifyContent: "space-between",
     paddingTop: Platform.OS === 'ios' ? 60 : 40,
     paddingHorizontal: 20,
-    backgroundColor: "#fff",
-    paddingBottom: 15,
+    backgroundColor: "#F8F9FB",
+    paddingBottom: 20,
   },
-  backBtn: { backgroundColor: "#f5f5f5", padding: 8, borderRadius: 12 },
-  headerTitle: { fontSize: 18, fontWeight: "bold" },
-  section: { marginBottom: 25 },
-  sectionHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 },
-  sectionTitle: { fontSize: 18, fontWeight: "bold", color: "#1a1a1a" },
-  editLink: { color: "#ff7a00", fontWeight: "600" },
+  backCircle: {
+    backgroundColor: "#fff",
+    width: 45,
+    height: 45,
+    borderRadius: 22.5,
+    justifyContent: "center",
+    alignItems: "center",
+    elevation: 3,
+    shadowColor: "#000",
+    shadowOpacity: 0.05,
+    shadowRadius: 10,
+  },
+  headerCenter: { alignItems: 'center' },
+  headerTitle: { fontSize: 18, fontWeight: "800", color: "#1a1a1a" },
+  headerStep: { fontSize: 12, color: "#999", fontWeight: "600", marginTop: 2 },
+
+  scrollBody: { paddingHorizontal: 20, paddingBottom: 140 },
+
+  sectionHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 15 },
+  sectionTitle: { fontSize: 17, fontWeight: "800", color: "#1a1a1a" },
+  editLink: { color: "#FF7A00", fontWeight: "700", fontSize: 14 },
+
   addressCard: {
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#fff',
-    padding: 15,
-    borderRadius: 20,
-    borderWidth: 1,
-    borderColor: '#eee'
+    padding: 18,
+    borderRadius: 24,
+    shadowColor: "#000",
+    shadowOpacity: 0.03,
+    shadowRadius: 15,
+    elevation: 2,
   },
-  iconCircle: { backgroundColor: '#fff5ed', padding: 10, borderRadius: 15 },
-  addressName: { fontSize: 16, fontWeight: '700', marginBottom: 2 },
-  addressText: { color: '#777', fontSize: 13 },
-  paymentRow: { flexDirection: 'row', justifyContent: 'space-between', marginTop: 12 },
-  paymentBtn: {
-    flex: 1,
+  addressIconBox: { backgroundColor: '#FFF5EE', padding: 12, borderRadius: 16 },
+  addressInfo: { marginLeft: 15, flex: 1 },
+  addressLabel: { fontSize: 15, fontWeight: '700', color: '#1a1a1a' },
+  addressSubtext: { color: '#888', fontSize: 13, marginTop: 3 },
+
+  paymentGrid: { flexDirection: 'row', justifyContent: 'space-between' },
+  payItem: {
+    width: (width - 60) / 3,
     backgroundColor: '#fff',
-    padding: 15,
-    borderRadius: 15,
+    paddingVertical: 20,
+    borderRadius: 20,
     alignItems: 'center',
-    marginHorizontal: 5,
-    borderWidth: 1,
-    borderColor: '#eee'
+    borderWidth: 1.5,
+    borderColor: 'transparent',
   },
-  activePayment: { backgroundColor: '#ff7a00', borderColor: '#ff7a00' },
-  paymentText: { marginTop: 8, fontWeight: '600', fontSize: 12 },
-  summaryCard: { backgroundColor: '#fff', padding: 20, borderRadius: 20, marginBottom: 20 },
-  summaryRow: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 8 },
-  summaryLabel: { color: '#888' },
-  summaryValue: { fontWeight: '600' },
-  totalLabel: { fontSize: 18, fontWeight: 'bold' },
-  totalValue: { fontSize: 20, fontWeight: 'bold', color: '#ff7a00' },
-  promoContainer: { flexDirection: 'row', marginBottom: 30 },
-  promoInput: { 
-    flex: 1, 
-    backgroundColor: '#fff', 
-    paddingHorizontal: 15, 
-    borderRadius: 15, 
-    height: 50,
-    borderWidth: 1,
-    borderColor: '#eee'
+  payItemActive: { backgroundColor: '#1a1a1a', borderColor: '#1a1a1a' },
+  payItemText: { marginTop: 10, fontWeight: '700', fontSize: 11, color: '#555' },
+  activeCheck: { position: 'absolute', top: 8, right: 8 },
+
+  promoWrapper: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#fff',
+    borderRadius: 20,
+    marginTop: 25,
+    height: 60,
+    paddingRight: 8,
   },
-  promoBtn: { backgroundColor: '#1a1a1a', paddingHorizontal: 20, borderRadius: 15, justifyContent: 'center', marginLeft: 10 },
-  promoBtnText: { color: '#fff', fontWeight: 'bold' },
-  footer: { padding: 25, backgroundColor: '#fff', borderTopLeftRadius: 30, borderTopRightRadius: 30 },
-  placeOrderBtn: { backgroundColor: '#ff7a00', padding: 20, borderRadius: 20, alignItems: 'center' },
-  placeOrderText: { color: '#fff', fontSize: 18, fontWeight: 'bold' }
+  promoInput: { flex: 1, paddingHorizontal: 12, fontWeight: '600', color: '#1a1a1a' },
+  applyBtn: { backgroundColor: '#FF7A00', paddingHorizontal: 18, paddingVertical: 10, borderRadius: 14 },
+  applyBtnText: { color: '#fff', fontWeight: '800', fontSize: 13 },
+
+  receiptContainer: {
+    marginTop: 30,
+    backgroundColor: '#fff',
+    borderRadius: 24,
+    padding: 20,
+  },
+  receiptRow: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 15 },
+  receiptLabel: { color: '#999', fontWeight: '600' },
+  receiptValue: { color: '#1a1a1a', fontWeight: '700' },
+  dottedDivider: { borderBottomWidth: 1, borderBottomColor: '#eee', borderStyle: 'dashed', marginVertical: 5, marginBottom: 15 },
+  totalLabel: { fontSize: 16, fontWeight: '800', color: '#1a1a1a' },
+  totalPrice: { fontSize: 22, fontWeight: '900', color: '#FF7A00' },
+
+  footer: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    paddingTop: 20,
+    paddingBottom: Platform.OS === 'ios' ? 40 : 25,
+    paddingHorizontal: 25,
+    backgroundColor: '#fff',
+    borderTopLeftRadius: 35,
+    borderTopRightRadius: 35,
+  },
+  mainOrderBtn: {
+    backgroundColor: '#1a1a1a',
+    height: 64,
+    borderRadius: 22,
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 10,
+  },
+  orderBtnText: { color: '#fff', fontSize: 16, fontWeight: '900', letterSpacing: 1 },
+  orderBtnIcon: { backgroundColor: '#fff', width: 44, height: 44, borderRadius: 16, justifyContent: 'center', alignItems: 'center' },
 });
