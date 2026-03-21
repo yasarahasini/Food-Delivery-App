@@ -1,30 +1,23 @@
-import { IsNotEmpty, IsEmail, IsArray, IsNumber } from 'class-validator';
+import { IsString, IsNotEmpty, IsOptional } from 'class-validator';
 
 export class CreateOrderDto {
+  @IsString()
   @IsNotEmpty()
   name: string;
 
-  @IsEmail()
-  email: string;
-
+  @IsString()
   @IsNotEmpty()
   phone: string;
 
+  @IsString()
   @IsNotEmpty()
   address: string;
 
+  @IsString()
   @IsNotEmpty()
   city: string;
 
-  @IsNotEmpty()
-  zip: string;
-
-  @IsNotEmpty()
-  paymentMethod: string;
-
-  @IsArray()
-  items: any[];
-
-  @IsNumber()
-  total: number;
+  @IsString()
+  @IsOptional()
+  notes?: string;
 }

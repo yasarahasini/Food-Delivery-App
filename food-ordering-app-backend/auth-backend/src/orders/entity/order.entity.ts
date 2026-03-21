@@ -1,20 +1,12 @@
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  CreateDateColumn,
-} from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 
 @Entity()
 export class Order {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
+  @PrimaryGeneratedColumn()
+  id: number;
 
   @Column()
   name: string;
-
-  @Column()
-  email: string;
 
   @Column()
   phone: string;
@@ -25,21 +17,9 @@ export class Order {
   @Column()
   city: string;
 
-  @Column()
-  zip: string;
+  @Column({ nullable: true })
+  notes?: string;
 
-  @Column()
-  paymentMethod: string;
-
-  @Column({ type: 'jsonb' })
-  items: any[];
-
-  @Column('decimal')
-  total: number;
-
-  @Column({ default: 'Pending' })
-  status: string;
-
-  @CreateDateColumn()
+  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;
 }

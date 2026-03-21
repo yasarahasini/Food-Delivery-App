@@ -3,7 +3,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { OrdersService } from './orders.service';
 import { OrdersController } from './orders.controller';
 import { Order } from './entity/order.entity';
-
 @Module({
   imports: [TypeOrmModule.forFeature([Order])],
   providers: [OrdersService],
