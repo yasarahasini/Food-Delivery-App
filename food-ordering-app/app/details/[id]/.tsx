@@ -78,7 +78,7 @@ export default function DetailsScreen() {
           <Text style={styles.descriptionBody}>
             Experience the artisanal craft of our {item.name}. Every layer is designed to 
             provoke the senses, using locally sourced ingredients and traditional slow-cooking 
-            techniques that define our kitchen's philosophy.
+            techniques that define our kitchen s philosophy.
           </Text>
         </ScrollView>
 

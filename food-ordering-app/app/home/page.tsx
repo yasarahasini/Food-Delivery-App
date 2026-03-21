@@ -122,7 +122,7 @@ export default function HomeScreen() {
           {activeTab === "home" && <View style={styles.activeDot} />}
         </Pressable>
         
-        <Pressable onPress={() => router.push("/cart")} style={styles.cartCenterBtn}>
+        <Pressable onPress={() => router.push("/cart/page")} style={styles.cartCenterBtn}>
             <View style={styles.cartInner}>
                 <Ionicons name="cart" size={26} color="#fff" />
             </View>
