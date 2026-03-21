@@ -7,7 +7,7 @@ export default function LoginScreen() {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false); // Added loading state
+  const [loading, setLoading] = useState(false); 
 
   const handleLogin = async () => {
     if (!email || !password) {
@@ -45,13 +45,13 @@ export default function LoginScreen() {
       style={styles.container}
     >
       <View style={styles.innerContainer}>
-        {/* Header Section */}
+     
         <View style={styles.header}>
           <Text style={styles.title}>Welcome Back</Text>
           <Text style={styles.subtitle}>Sign in to continue</Text>
         </View>
 
-        {/* Input Section */}
+     
         <View style={styles.form}>
           <Text style={styles.label}>Email Address</Text>
           <TextInput
@@ -91,7 +91,7 @@ export default function LoginScreen() {
           </Pressable>
         </View>
 
-        {/* Footer Section */}
+      
         <View style={styles.footer}>
           <Text style={styles.footerText}>Don't have an account? </Text>
           <Pressable onPress={() => router.push("/auth/signup")}>

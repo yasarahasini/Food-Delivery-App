@@ -60,13 +60,12 @@ export default function SignupScreen() {
       style={styles.container}
     >
       <ScrollView contentContainerStyle={styles.scrollContainer} showsVerticalScrollIndicator={false}>
-        {/* Header */}
+      
         <View style={styles.header}>
           <Text style={styles.title}>Create Account</Text>
           <Text style={styles.subtitle}>Join us to get started with your journey</Text>
         </View>
 
-        {/* Form */}
         <View style={styles.form}>
           <View style={styles.inputGroup}>
             <Text style={styles.label}>Full Name</Text>
@@ -121,7 +120,7 @@ export default function SignupScreen() {
           </Pressable>
         </View>
 
-        {/* Footer */}
+       
         <View style={styles.footer}>
           <Text style={styles.footerText}>Already have an account? </Text>
           <Pressable onPress={() => router.push("/")}>
@@ -179,12 +178,12 @@ const styles = StyleSheet.create({
     borderRadius: 14,
     fontSize: 16,
     color: "#333",
-    // Subtle shadow for iOS
+  
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.05,
     shadowRadius: 2,
-    // Elevation for Android
+   
     elevation: 1,
   },
   button: {
